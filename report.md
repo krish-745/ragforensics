@@ -88,4 +88,5 @@ When one of these actually causes trouble, log it in `challenges.md` and update 
 ## Session log
 
 - **2026-10-10.** Decisions recorded (see decision log). Name checked against PyPI and GitHub. `chroma-hnswlib` verified working on Python 3.11. `CLAUDE.md`, `report.md`, `challenges.md` created; `challenges.md` then changed (at the user's request) from a list of expected risks into a log of problems actually hit, with the risks moved here, and narrowed again to project-relevant technical and research problems only (tooling and session friction removed; "matching FAISS's search loop" added). Phase 0 done: uv project (Python 3.11, numpy 2.4.6, faiss-cpu 1.15.1 pinned `<1.16`, chroma-hnswlib 0.7.6), Apache-2.0 license, module layout, smoke tests (3 passed), `uv build` + `twine check` passed.
+- **2026-10-10 (later).** Published as a public repo: https://github.com/krish-745/ragforensics (default branch `main`). Phase 1 on hold until the user says go.
 - **2026-10-09.** Idea review: prior-art search, feasibility analysis, replay spike E1.
