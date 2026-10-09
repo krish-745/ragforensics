@@ -16,3 +16,7 @@ wheels/
 # Downloaded datasets, indexes and caches (FinanceBench is CC-BY-NC: never commit it)
 data/
 .cache/
+
+# Local planning files (kept out of the public repo)
+CLAUDE.md
+Idea.md
