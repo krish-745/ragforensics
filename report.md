@@ -1,6 +1,6 @@
 # ragforensics: project report
 
-Living status document. Newest entries go at the top of each log. Hard problems and risks are tracked separately in `challenges.md`.
+Living status document. Newest entries go at the top of each log. Problems actually hit while building are logged in `challenges.md`; expected risks are listed under "Risks" below.
 
 ## Status
 
@@ -62,7 +62,30 @@ Takeaway: exact replay of FAISS HNSW is feasible and cheap. Low recall is expect
 
 Positioning: why-not provenance for neural retrieval pipelines. The integrated, evidence-backed, per-query tool appears new; most building blocks are not, and the write-up must say so.
 
+## Risks (expected, not yet hit)
+
+When one of these actually causes trouble, log it in `challenges.md` and update its status here.
+
+| Risk | Phase | Plan |
+|---|---|---|
+| HNSW replay drifts on inner product/cosine, distance ties or a new FAISS version | 1 | Property tests over metrics, ef values and planted ties; FAISS pinned `<1.16`; fall back to FAISS's own distance code if float rounding flips an order. Partly de-risked by E1 |
+| hnswlib graph is only reachable through undocumented pickled bytes | 1 | Decode the pickled state; separate replayer held to the same fidelity bar |
+| Re-implementing the user's stages drifts from their real code | 1–2 | Re-invoke the user's stage callables with gold injected instead of re-implementing them |
+| Evidence text doesn't match parsed text exactly (whitespace, hyphenation, PDF errors) | 1–2 | Exact, then normalized, then fuzzy alignment with confidence; failed alignment counts as parse-stage evidence |
+| Chunking blame is counterfactual and re-chunking means re-embedding | 2–3 | Split/dilution classes; re-embed only affected documents with a content-hash cache |
+| Embedding mismatch (gold exact rank far down) has no natural "kept set" | 2 | Exact rank, similarity gap to k-th result, lexical overlap, rescue by query rewrite or hybrid weight |
+| Filtered ANN (post-filter starvation, graph disconnection) | 2, 6 | Replay the walk with the filter; test higher ef, pre-filter and iterative scan |
+| "Smallest repair" has no common unit across knobs | 3 | Explicit cost model (latency, re-embedding, rebuild, broken queries); He & Lo-style minimal refinement |
+| Side-effect checks are expensive at corpus scale | 3 | Partial replay, caching, early stopping |
+| Planted-bug benchmark is circular | 2, 7 | Blind random-perturbation benchmark plus results on real misses |
+| Synthetic questions have more than one valid gold chunk | 4 | Ambiguity filter; report the rejection rate |
+| PDF tables flatten badly and hide parse losses | 2 | Parsing as its own stage; swappable parser |
+| Cross-encoder scores vary with batching or GPU kernels | 2 | Measure drift; documented tolerance; flag verdicts inside it |
+| Most vector DBs hide their HNSW graph | 6 | Tier-1 rank-vs-exact diagnosis everywhere; graph replay only where available |
+| Someone ships the same idea first | all | Publish early; differentiate on evidence, fidelity, costed repairs |
+| FinanceBench is CC-BY-NC | 2 | Download script only; never commit the data |
+
 ## Session log
 
-- **2026-10-10.** Decisions recorded (see decision log). Name checked against PyPI and GitHub. `chroma-hnswlib` verified working on Python 3.11. `CLAUDE.md`, `report.md`, `challenges.md` created. Phase 0 done: uv project (Python 3.11, numpy 2.4.6, faiss-cpu 1.15.1 pinned `<1.16`, chroma-hnswlib 0.7.6), Apache-2.0 license, module layout, smoke tests (3 passed), `uv build` + `twine check` passed.
+- **2026-10-10.** Decisions recorded (see decision log). Name checked against PyPI and GitHub. `chroma-hnswlib` verified working on Python 3.11. `CLAUDE.md`, `report.md`, `challenges.md` created; `challenges.md` then changed (at the user's request) from a list of expected risks into a log of problems actually hit, with the risks moved here. Phase 0 done: uv project (Python 3.11, numpy 2.4.6, faiss-cpu 1.15.1 pinned `<1.16`, chroma-hnswlib 0.7.6), Apache-2.0 license, module layout, smoke tests (3 passed), `uv build` + `twine check` passed.
 - **2026-10-09.** Idea review: prior-art search, feasibility analysis, replay spike E1.
