@@ -1,0 +1,35 @@
+[project]
+name = "ragforensics"
+version = "0.1.0"
+description = "Explain why a RAG pipeline did not retrieve a document: per-stage evidence and verified repairs"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["rag", "retrieval", "debugging", "hnsw", "faiss", "provenance"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+authors = [
+    { name = "krish-745", email = "krishgoyal745@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "chroma-hnswlib>=0.7.6",
+    # HNSW replay must match FAISS internals exactly; widen only after fidelity tests pass on the new version
+    "faiss-cpu>=1.15.1,<1.16",
+    "numpy>=2.4.6",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.168.5",
+    "pytest>=9.1.1",
+]

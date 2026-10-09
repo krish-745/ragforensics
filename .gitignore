@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Test caches
+.pytest_cache/
+.hypothesis/
+
+# Downloaded datasets, indexes and caches (FinanceBench is CC-BY-NC: never commit it)
+data/
+.cache/
